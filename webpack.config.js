@@ -1,8 +1,23 @@
+const path = require('path')
+
 module.exports = {
-  entry: './client/src',
+  entry: './client/src/index.jsx',
   output: { 
-    path: './client/dist',
+    path: path.resolve(__dirname, 'client/dist'),
     filename: 'app.js'
   },
-  mode: 'development'
+  module: {
+    rules: [
+      {
+        test: [/\.jsx$/],
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-react', '@babel/preset-env']
+          }
+        }
+      }
+    ]
+  }
 }
