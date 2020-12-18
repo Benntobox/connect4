@@ -13,10 +13,10 @@ class App extends React.Component {
 
   init() {
     let board = [];
-    for (let y = 0; y < 6; y++) {
+    for (let y = 0; y < 7; y++) {
       let row = [];
-      for (let x = 0; x < 7; x++) {
-        row[x] = x * 10;
+      for (let x = 0; x < 6; x++) {
+        row[x] = 0;
       }
       board[y] = row;
     }
@@ -24,24 +24,33 @@ class App extends React.Component {
   }
 
   play(x) {
-    console.log('Play ', x)
     let y = 0; 
-    while (y < this.state.height) {
-      if (this.state.board[y][x] === 0 && y === this.state.height - 1 || this.state.board[y+1][x] > 0) {
-        this.setSquare(x, y);
+    while (y < 6) {
+      console.log('Play ', this.get(x, y))
+      if (this.get(x, y) === 0 && this.get(x, y+1) > 0 || y === 5) {
+        console.log('SETTING ', x, ',', y)
+        this.set(x, y);
+        this.next();
+        return;
       } else {
         y++;
       }
     }
   }
 
+  set(x, y) {
+    let board = this.state.board;
+    board[x][y] = this.state.currentTurn;
+    this.setState({board: board})
+  }
+
   get(x, y) {
-    return this.state.board[y][x];
+    return this.state.board[x][y];
   }
 
   setSquare(x, y) {
     let board = this.state.board;
-    board[y][x] = this.state.currentTurn;
+    board[x][y] = this.state.currentTurn;
     this.setState({board: board})
   }
 
