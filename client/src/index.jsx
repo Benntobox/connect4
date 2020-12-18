@@ -1,3 +1,6 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -7,17 +10,15 @@ class App extends React.Component {
   }
 
   play(x, y) {
-    $.ajax({
-      url: '/play',
-      method: 'POST',
-      data: {x, y},
-      success: () => 'Successful post!'
-    })
+    console.log('Play')
   }
 
   render() {
     return (
+      <div>
       <div>TESTING FURTHER STUFF AGAIN</div>
+      <button >PRESS ME</button>
+      </div>
     )
   }
 }
