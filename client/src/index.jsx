@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import $ from 'jquery';
 import Board from './components/Board.jsx'
 
 class App extends React.Component {
@@ -7,7 +8,8 @@ class App extends React.Component {
     super(props);
     this.state = {
       currentTurn: 1,
-      board: this.init()
+      board: this.init(),
+      active: true
     }
   }
 
@@ -24,18 +26,44 @@ class App extends React.Component {
   }
 
   play(x) {
+    if (!this.state.active) { console.log('GAME IS OVER!'); return; }
     let y = 0; 
     while (y < 6) {
       console.log('Play ', this.get(x, y))
       if (this.get(x, y) === 0 && this.get(x, y+1) > 0 || y === 5) {
         console.log('SETTING ', x, ',', y)
         this.set(x, y);
-        this.next();
+        this.checkWin(x, y) ? this.gameEnd() : this.next();
         return;
-      } else {
-        y++;
       }
+      y++;
     }
+  }
+
+  checkWin(x, y) {
+    return this.checkRow(x) || this.checkCol(y) || this.checkDiagonals(x, y);
+  }
+
+  checkRow(x) {
+    return this.state.board[x].reduce((result, val) => result = result || val === 2, false);
+  }
+
+  checkCol(y) {
+    return false;
+  }
+
+  checkDiagonals(x, y) {
+    return false;
+  }
+
+  gameEnd() {
+    this.setState({active: false})
+    $.ajax({
+      url: '/gameover',
+      method: 'POST',
+      data: {player: this.state.currentTurn},
+      success: () => console.log('GAME OVER')
+    })
   }
 
   set(x, y) {
@@ -48,12 +76,6 @@ class App extends React.Component {
     return this.state.board[x][y];
   }
 
-  setSquare(x, y) {
-    let board = this.state.board;
-    board[x][y] = this.state.currentTurn;
-    this.setState({board: board})
-  }
-
   next() {
     this.setState({currentTurn: this.state.currentTurn === 1 ? 2 : 1})
   }
@@ -62,7 +84,8 @@ class App extends React.Component {
     return (
       <div>
         <Board board={this.state.board} play={this.play.bind(this)}/>
-        {[...Array(7).keys()].map(x => (<button onClick={this.play.bind(this, x)}>{x}</button>))}
+        {[...Array(7).keys()].map(x => (<button className="play" onClick={this.play.bind(this, x)}>{x}</button>))}
+        {(this.state.active ? <div></div> : <div>GAME IS OVER BRAH</div>)}
       </div>
     )
   }
