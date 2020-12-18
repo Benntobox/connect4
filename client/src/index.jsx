@@ -7,38 +7,36 @@ class App extends React.Component {
     super(props);
     this.state = {
       currentTurn: 1,
-      height: 6,
-      width: 7,
-      board: []
+      board: this.init()
     }
-    this.init(); // makes board
   }
 
   init() {
     let board = [];
-    for (let y = 0; y < this.state.height; y++) {
+    for (let y = 0; y < 6; y++) {
       let row = [];
-      for (let x = 0; x < this.state.width; x++) {
-        //row[x] = 0;
+      for (let x = 0; x < 7; x++) {
+        row[x] = x * 10;
       }
       board[y] = row;
     }
-    this.setState({board: board})
+    return board;
   }
 
   play(x) {
     console.log('Play ', x)
     let y = 0; 
     while (y < this.state.height) {
-      if (board[y][x] === 0 && board[y+1][x] > 0 || y === this.state.height - 1) {
-        this.setState({board});
+      if (this.state.board[y][x] === 0 && y === this.state.height - 1 || this.state.board[y+1][x] > 0) {
+        this.setSquare(x, y);
       } else {
         y++;
       }
     }
-    if (x >= 0 && x < this.state.width && y >= 0 && y < this.state.height) {
-      this.setSquare(x, y);
-    }
+  }
+
+  get(x, y) {
+    return this.state.board[y][x];
   }
 
   setSquare(x, y) {
@@ -54,7 +52,7 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <Board />
+        <Board board={this.state.board} play={this.play.bind(this)}/>
         {[...Array(7).keys()].map(x => (<button onClick={this.play.bind(this, x)}>{x}</button>))}
       </div>
     )

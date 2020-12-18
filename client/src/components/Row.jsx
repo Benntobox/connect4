@@ -3,7 +3,7 @@ import Square from './Square.jsx'
 
 const Row = (props) => (
   <div id={props.y} className="row" style={{display : 'inline-block'}}>
-    {[...Array(7).keys()].map(x => (<Square x={x}/>))}
+    {props.row.map((val, x) => (<Square val={val} x={x} y={props.y}/>))}
   </div>
 )
 
