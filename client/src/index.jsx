@@ -45,14 +45,27 @@ class App extends React.Component {
   }
 
   checkRow(x) {
-    return this.state.board[x].reduce((result, val) => result = result || val === 2, false);
+    console.log('ROW CHECK: ', this.state.board[x])
+    return this.fourInARow(this.state.board[x]);
   }
 
   checkCol(y) {
-    return false;
+    let arr = this.state.board.map(row => row[y])
+    console.log('COL CHECK: ', arr)
+    return this.fourInARow(arr);
   }
 
   checkDiagonals(x, y) {
+    return false;
+  }
+
+  fourInARow(arr) {
+    let longest, current = 0;
+    for (let val of arr) {
+      current === val ? longest++ : longest = 1;
+      if (longest === 4 && current !== 0) { return true; }
+      current = val;
+    }
     return false;
   }
 
