@@ -1,7 +1,7 @@
 import React from 'react';
 
 const Square = (props) => (
-  <div id={props.y} className="square">{0}</div>
+  <div id={props.x} className="square">{props.x}</div>
 )
 
 export default Square;
