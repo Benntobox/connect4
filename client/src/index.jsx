@@ -1,23 +1,26 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Board from './components/Board.jsx'
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentTurn: 1
+      currentTurn: 1,
+      length: 6,
+      width: 7
     }
   }
 
-  play(x, y) {
-    console.log('Play')
+  play(x) {
+    console.log('Play ', x)
   }
 
   render() {
     return (
       <div>
-      <div>TESTING FURTHER STUFF AGAIN</div>
-      <button >PRESS ME</button>
+        <Board />
+        {[...Array(7).keys()].map(x => (<button onClick={this.play.bind(this, x)}>{x}</button>))}
       </div>
     )
   }
