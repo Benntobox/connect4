@@ -8,10 +8,6 @@ class Board extends React.Component {
     }
   }
 
-  setSquare(x, y) {
-
-  }
-
   render() {
     return (
     <div className="board">

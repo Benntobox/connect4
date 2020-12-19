@@ -115,7 +115,7 @@ class App extends React.Component {
       <div>
         <Board board={this.state.board} play={this.play.bind(this)}/>
         {[...Array(7).keys()].map(x => (<button className="play" onClick={this.play.bind(this, x)}>{x}</button>))}
-        {(this.state.active ? <div></div> : <div>GAME IS OVER BRAH</div>)}
+        {(this.state.active ? <div></div> : <div className="end">GAME IS OVER! PLAYER {this.state.currentTurn} WINS!</div>)}
       </div>
     )
   }
