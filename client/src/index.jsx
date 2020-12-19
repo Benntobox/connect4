@@ -15,12 +15,12 @@ class App extends React.Component {
 
   init() {
     let board = [];
-    for (let y = 0; y < 7; y++) {
+    for (let x = 0; x < 7; x++) {
       let row = [];
-      for (let x = 0; x < 6; x++) {
-        row[x] = 0;
+      for (let y = 0; y < 6; y++) {
+        row[y] = 0;
       }
-      board[y] = row;
+      board[x] = row;
     }
     return board;
   }
@@ -41,29 +41,46 @@ class App extends React.Component {
   }
 
   checkWin(x, y) {
-    return this.checkRow(x) || this.checkCol(y) || this.checkDiagonals(x, y);
+    return this.fourInARow(this.state.board[x]) || 
+      this.fourInARow(this.state.board.map(row => row[y])) ||
+      this.fourInARow(this.checkMajorDiag(x, y)) || 
+      this.fourInARow(this.checkMinorDiag(x, y));
   }
 
-  checkRow(x) {
-    console.log('ROW CHECK: ', this.state.board[x])
-    return this.fourInARow(this.state.board[x]);
+  checkMajorDiag(x, y) {
+    let arr = [];
+    while (x > 0 && y > 0) {
+      x--;
+      y--;
+    }
+    while (x < 7 && y < 6) {
+      arr.push(this.get(x, y));
+      x++;
+      y++;
+    }
+    return arr;
   }
 
-  checkCol(y) {
-    let arr = this.state.board.map(row => row[y])
-    console.log('COL CHECK: ', arr)
-    return this.fourInARow(arr);
-  }
-
-  checkDiagonals(x, y) {
-    return false;
+  checkMinorDiag(x, y) {
+    let arr = [];
+    while (x > 0 && y < 5) {
+      x--;
+      y++;
+    }
+    while (x < 7 && y > 0) {
+      console.log('minor diag ', x, ', ', y)
+      arr.push(this.get(x, y));
+      x++;
+      y--;
+    }
+    return arr;
   }
 
   fourInARow(arr) {
     let longest, current = 0;
     for (let val of arr) {
       current === val ? longest++ : longest = 1;
-      if (longest === 4 && current !== 0) { return true; }
+      if (longest === 4 && current !== 0) { console.log('arr is', arr); return true; }
       current = val;
     }
     return false;
@@ -75,7 +92,7 @@ class App extends React.Component {
       url: '/gameover',
       method: 'POST',
       data: {player: this.state.currentTurn},
-      success: () => console.log('GAME OVER')
+      success: (data) => console.log(data)
     })
   }
 
